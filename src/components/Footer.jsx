@@ -1,9 +1,11 @@
 import styled from 'styled-components';
 export default function Footer(props) {
 
+    const {contador} = props;
+
     return (
         <Footercss>
-            <p>0/8 CONCLUÍDOS</p>
+            <p>{contador}/8 CONCLUÍDOS</p>
         </Footercss>
     )
 }

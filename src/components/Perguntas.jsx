@@ -1,111 +1,285 @@
 import styled from 'styled-components';
 import cards from '../cards';
-import virar from '../Assets/seta_virar.png'
+import play from '../Assets/seta_play.png';
+import virar from '../Assets/seta_virar.png';
+import errar from '../Assets/icone_erro.png';
+import quaseacertar from '../Assets/icone_quase.png';
+import acertar from '../Assets/icone_certo.png';
+import { useState } from 'react';
+
 export default function Perguntas(props) {
+    const { contador, setContador } = props;
 
-    const {aumentaAltura, setAumentaAltura, atualizaComPergunta, setAtualizaComPergunta,atualizaWidth, setAtualizaWidth, atualizaHeight,
-         setAtualizaHeight, atualizaWeight, setAtualizaWeight, atualizaSize, setAtualizaSize, atualizaLineHeight, setAtualizaLineHeight,
-         atualizaDisplay, setAtualizaDisplay, atualizaMarginbottom, setatualizaMarginbottom, atualizaMarginTop, setAtualizaMarginTop,
-          atualizaMarginLeft1, setAtualizaMarginLeft, atualizaMarginLeft2, setAtualizaMarginLeft2, mudaIcone, setMudaIcone, arrayPerguntasClicadas,
-          setPerguntasClicadas, atualizaHeightPage, setAtualizaHeightPage} = props;
-
-    let perguntas = ["Pergunta 1", "Pergunta 2", "Pergunta 3", "Pergunta 4", "Pergunta 5", "Pergunta 6", "Pergunta 7", "Pergunta 8"];
-
-    function aumentarAltura (indice) {
-
-        const array = [];
-        array.push(indice)
-
-        setAumentaAltura('131px');
-        perguntas = [];
-
-        for (let i=0; i < cards.length; i++) {
-            console.log(cards[i].question);
-            perguntas.push(cards[i].question);
-        }
-            setAtualizaComPergunta(perguntas);
-            setAtualizaWidth('247.83px');
-            setAtualizaHeight('22px');
-            setAtualizaWeight('400');
-            setAtualizaSize('18px');
-            setAtualizaLineHeight('22px');
-            setAtualizaDisplay('block');
-            setatualizaMarginbottom('65px');
-            setAtualizaMarginTop('18px');
-            setAtualizaMarginLeft('15px');
-            setAtualizaMarginLeft2('264px');
-            setMudaIcone(virar);
-            setAtualizaHeightPage('1320px')
-}
-    
     return (
-        <Container3 aumentaAltura={aumentaAltura} atualizaWidth={atualizaWidth} atualizaHeight={atualizaHeight} atualizaWeight={atualizaWeight} atualizaSize={atualizaSize} atualizaLineHeight={atualizaLineHeight} atualizaDisplay={atualizaDisplay} atualizaMarginbottom={atualizaMarginbottom} atualizaMarginTop={atualizaMarginTop} atualizaMarginLeft1={atualizaMarginLeft1} atualizaMarginLeft2={atualizaMarginLeft2} atualizaHeightPage={atualizaHeightPage}>
-
-            {atualizaComPergunta.map((pergunta, indice) => (
+        <ContainerPerguntas>
+            {cards.map((card) => (
                 <RenderizaPerguntas
-                    key={indice}
-                    virtualkey={pergunta}
-                    aumentarAltura={aumentarAltura}
-                    aumentaAltura={aumentaAltura}
-                    mudaIcone = {mudaIcone}
+                    key={card.id}
+                    id={card.id}
+                    question={card.question}
+                    answer={card.answer}
+                    contador={contador}
+                    setContador={setContador}
                 />
             ))}
-
-        </Container3>
-    )
-}
-
-function RenderizaPerguntas(props) {
-    
-    return (
-        <div>
-            <p>{props.virtualkey}</p>
-            <img src={props.mudaIcone} onClick={props.aumentarAltura}/>
-        </div>
+        </ContainerPerguntas>
     );
 }
 
-const Container3 = styled.div`
-	width: 375px;
-    height: ${({ atualizaHeightPage }) => atualizaHeightPage};
-    background-color: #FB6B6B;
+function RenderizaPerguntas(props) {
+    const [tela1, setTela1] = useState(true);
+    const [tela2, setTela2] = useState(false);
+    const [tela3, setTela3] = useState(false);
+    const [tela4, setTela4] = useState(false);
+    const [defineIcone, setDefineIcone] = useState(null);
+    const [colocarSublinhado, setColocarSublinhado] = useState('');
+
+    const { id, question, answer, contador, setContador } = props;
+
+    function naoLembrei() {
+        setTela3(false);
+        setTela4(true);
+        setContador(contador + 1);
+        setDefineIcone(errar);
+        setColocarSublinhado('red');
+
+    }
+
+    function quase() {
+        setTela3(false);
+        setTela4(true);
+        setContador(contador + 1);
+        setDefineIcone(quaseacertar);
+        setColocarSublinhado('orange');
+
+    }
+
+    function zap() {
+        setTela3(false);
+        setTela4(true);
+        setContador(contador + 1);
+        setDefineIcone(acertar);
+        setColocarSublinhado('green');
+
+    }
+
+    return (
+        <>
+            {tela1 && (
+                <Cartao>
+                    <Pergunta>Pergunta {id}</Pergunta>
+                    <BotaoPlay src={play} onClick={() => {
+                        setTela1(false);
+                        setTela2(true);
+                    }
+                    }
+                    />
+                </Cartao>
+            )}
+
+            {tela2 && (
+                <Cartao ativa={tela2.toString()}>
+                    <TextoPergunta>{question}</TextoPergunta>
+                    <BotaoVirar src={virar} onClick={() => {
+                        setTela2(false);
+                        setTela3(true);
+                    }
+                    } />
+                </Cartao>
+            )}
+
+            {tela3 && (
+                <Cartao1>
+                    <TextoResposta>{answer}</TextoResposta>
+                    <Lembranca>
+                        <Button1 onClick={naoLembrei}>
+                            <Buttonajuste>Não lembrei</Buttonajuste>
+                        </Button1>
+                        <Button2 onClick={quase}>Quase não lembrei</Button2>
+                        <Button3 onClick={zap}>Zap!</Button3>
+                    </Lembranca>
+                </Cartao1>
+            )}
+
+            {tela4 && (
+                <Cartao>
+                    <Pergunta1 sublinhado={colocarSublinhado}>Pergunta {id}</Pergunta1>
+                    <BotaoPlay src={defineIcone} />
+                </Cartao>
+            )}
+        </>
+    );
+}
+
+const ContainerPerguntas = styled.div`
+    width: 375px;
+    height: auto;
+    background-color: #fb6b6b;
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding-bottom: 100px;
+`;
 
-    div {
-    height: ${({ aumentaAltura }) => aumentaAltura};
+const Cartao = styled.div`
+    height: ${({ ativa }) => (ativa === 'true' ? '131px' : '65px')};
     width: 300px;
     border-radius: 5px;
-    background-color: #FFFFFF;
+    background-color: ${({ ativa }) => (ativa === 'true' ? '#FFFFD4' : '#ffffff')};
     box-shadow: 0px 4px 5px 0px #00000026;
     margin-bottom: 25px;
-    display: ${({ atualizaDisplay }) => atualizaDisplay};
+    display: ${({ ativa }) => (ativa === 'true' ? 'block' : 'flex')};
     justify-content: center;
     align-items: center;
-    }
+`;
 
-    p {
-    height:  ${({ atualizaHeight }) => atualizaHeight};
-    width:  ${({ atualizaWidth }) => atualizaWidth};
+const Cartao1 = styled.div`
+    height: auto;
+    width: 300px;
+    border-radius: 5px;
+    background-color: #FFFFD4;
+    box-shadow: 0px 4px 5px 0px #00000026;
+    margin-bottom: 25px;
+`;
+const Pergunta = styled.p`
+    height: 19px;
+    width: 87px;
     color: #333333;
     font-family: Recursive;
-    font-size:  ${({ atualizaSize }) => atualizaSize};
-    font-weight:  ${({ atualizaWeight }) => atualizaWeight};
-    line-height:  ${({ atualizaLineHeight }) => atualizaLineHeight};
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 19.2px;
     letter-spacing: 0em;
     text-align: left;
     margin-right: 163px;
-    margin-left:  ${({ atualizaMarginLeft1 }) => atualizaMarginLeft1};
-    margin-bottom: ${({ atualizaMarginbottom }) => atualizaMarginbottom};
-    margin-top: ${({ atualizaMarginTop }) => atualizaMarginTop};
-    }
+`;
 
-    img {
+const Pergunta1 = styled.p`
+    height: 19px;
+    width: 87px;
+    color: ${({ sublinhado }) => (sublinhado === 'red' ? '#FF3030' : sublinhado === 'orange' ? '#FF922E' : sublinhado === 'green' ? '#2FBE34' : '#333333')};
+    font-family: Recursive;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 19.2px;
+    letter-spacing: 0em;
+    text-align: left;
+    margin-right: 163px;
+    text-decoration: ${({ sublinhado }) => (sublinhado === 'red' ? 'line-through' : sublinhado === 'orange' ? 'line-through' : sublinhado === 'green' ? 'line-through' : 'none')};
+`;
+
+const BotaoPlay = styled.img`
     height: 23px;
     width: 20px;
     color: #333333;
-    margin-left: ${({ atualizaMarginLeft2 }) => atualizaMarginLeft2};
-    }
 
+`;
+
+const TextoPergunta = styled.p`
+    height: 22px;
+    width: 247.83px;
+    font-family: Recursive;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: 0em;
+    text-align: left;
+    margin-bottom:65px;
+    margin-top: 18px;
+    margin-left: 15px;
+    color: #333333;
+`;
+
+const BotaoVirar = styled.img`
+    height: 20px;
+    width: 30px;
+    left: 73px;
+    color: #333333;
+    margin-left: 254px;
+`;
+
+const TextoResposta = styled.p`
+    height: auto;
+    width: 247.83px;
+    font-family: Recursive;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #333333;
+    margin-top: 18px;
+    margin-left: 15px;
+`;
+
+const Lembranca = styled.div`
+    height:37.17px;
+    width: 300px;
+    display:flex;
+    justify-content:center;
+    align-items: center;
+    margin-top: 21.83px;
+    margin-bottom:10px;
+`;
+
+const Button1 = styled.div`
+    height: 37.17px;
+    width: 85.17px;
+    border-radius: 5px;
+    background-color: #FF3030;
+    margin-right: 7.74px;
+    text-align: center;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+`;
+const Buttonajuste = styled.div`
+    height: 37.17px;
+    width: 65.04px;
+    background-color: #FF3030;
+    color: #FFFFFF;
+    font-family: Recursive;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 14px;
+    letter-spacing: 0em;
+    text-align: center;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+const Button2 = styled.div`
+    height: 37.17px;
+    width: 85.17px;
+    border-radius: 5px;
+    background-color: #FF922E;
+    margin-right: 7.74px;
+    color: #FFFFFF;
+    font-family: Recursive;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 14px;
+    letter-spacing: 0em;
+    text-align: center;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+const Button3 = styled.div`
+    height: 37.17px;
+    width: 85.17px;
+    border-radius: 5px;
+    background-color: #2FBE34;
+    color: #FFFFFF;
+    font-family: Recursive;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 14px;
+    letter-spacing: 0em;
+    text-align: center;
+    display:flex;
+    justify-content: center;
+    align-items: center;
 `;
