@@ -8,8 +8,8 @@ import styled from 'styled-components';
 export default function App() {
 
   const [contador, setContador] = useState(0);
-
-  
+  const [array, setArray] = useState([]);
+  const [primeira, setPrimeira] = useState(false);
 
   return (
     <>
@@ -20,15 +20,15 @@ export default function App() {
 
           <Cabecalho />
 
-          <Perguntas contador={contador} setContador={setContador} />
+          <Perguntas contador={contador} setContador={setContador} array={array} setArray={setArray} primeira={primeira} setPrimeira={setPrimeira} />
 
-          <Footer contador={contador} />
+          <Footer contador={contador} array={array} setArray={setArray}/>
 
         </Container1 >
 
       </Tudo>
 
-      <TelaInicial />
+      <TelaInicial primeira={primeira} setPrimeira={setPrimeira} />
 
     </>
   )

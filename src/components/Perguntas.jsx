@@ -8,7 +8,7 @@ import acertar from '../Assets/icone_certo.png';
 import { useState } from 'react';
 
 export default function Perguntas(props) {
-    const { contador, setContador } = props;
+    const { contador, setContador, array, setArray, primeira, setPrimeira } = props;
 
     return (
         <ContainerPerguntas>
@@ -20,6 +20,8 @@ export default function Perguntas(props) {
                     answer={card.answer}
                     contador={contador}
                     setContador={setContador}
+                    array={array}
+                    setArray={setArray}
                 />
             ))}
         </ContainerPerguntas>
@@ -27,14 +29,15 @@ export default function Perguntas(props) {
 }
 
 function RenderizaPerguntas(props) {
-    const [tela1, setTela1] = useState(true);
+
+    const { id, question, answer, contador, setContador, array, setArray, primeira } = props;
+
+    const [tela1, setTela1] = useState({primeira});
     const [tela2, setTela2] = useState(false);
     const [tela3, setTela3] = useState(false);
     const [tela4, setTela4] = useState(false);
     const [defineIcone, setDefineIcone] = useState(null);
     const [colocarSublinhado, setColocarSublinhado] = useState('');
-
-    const { id, question, answer, contador, setContador } = props;
 
     function naoLembrei() {
         setTela3(false);
@@ -42,6 +45,9 @@ function RenderizaPerguntas(props) {
         setContador(contador + 1);
         setDefineIcone(errar);
         setColocarSublinhado('red');
+        const novoArray = [...array, errar];
+        setArray(novoArray)
+        
 
     }
 
@@ -51,6 +57,8 @@ function RenderizaPerguntas(props) {
         setContador(contador + 1);
         setDefineIcone(quaseacertar);
         setColocarSublinhado('orange');
+        const novoArray = [...array, quaseacertar];
+        setArray(novoArray);
 
     }
 
@@ -60,13 +68,15 @@ function RenderizaPerguntas(props) {
         setContador(contador + 1);
         setDefineIcone(acertar);
         setColocarSublinhado('green');
+        const novoArray = [...array, acertar];
+        setArray(novoArray);
 
     }
 
     return (
         <>
             {tela1 && (
-                <Cartao>
+                <Cartao ativar ={!tela1.toString()}>
                     <Pergunta>Pergunta {id}</Pergunta>
                     <BotaoPlay src={play} onClick={() => {
                         setTela1(false);
@@ -118,7 +128,7 @@ const ContainerPerguntas = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-bottom: 100px;
+    padding-bottom: 170px;
 `;
 
 const Cartao = styled.div`

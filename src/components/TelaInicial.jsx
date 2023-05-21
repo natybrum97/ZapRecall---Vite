@@ -4,16 +4,16 @@ import logo from '../Assets/logo.png';
 
 export default function TelaInicial(props) {
 
-  const [primeira, setPrimeira] = useState(true);
+  const {primeira, setPrimeira} = props;
 
-  if (primeira) {
+  if (!primeira) {
     return (
       <Inicial>
         <img src={logo} alt="Logo" />
         <div>ZapRecall</div>
         <button
           onClick={() => {
-            setPrimeira(false);
+            setPrimeira(true);
           }}
         >
           Iniciar Recall!
@@ -31,11 +31,11 @@ const Inicial = styled.div`
   z-index: 2;
   position: absolute;
   top: 0;
-  left: 198px;
+  left: 422px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-bottom: 514px;
+  padding-bottom: 585px;
 
   img {
     height: 161px;
