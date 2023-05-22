@@ -32,10 +32,12 @@ function RenderizaPerguntas(props) {
 
     const { id, question, answer, contador, setContador, array, setArray, primeira } = props;
 
-    const [tela1, setTela1] = useState({primeira});
+    const [tela1, setTela1] = useState({ primeira });
     const [tela2, setTela2] = useState(false);
     const [tela3, setTela3] = useState(false);
     const [tela4, setTela4] = useState(false);
+    const [tela5, setTela5] = useState(false);
+    const [tela6, setTela6] = useState(false);
     const [defineIcone, setDefineIcone] = useState(null);
     const [colocarSublinhado, setColocarSublinhado] = useState('');
 
@@ -47,13 +49,13 @@ function RenderizaPerguntas(props) {
         setColocarSublinhado('red');
         const novoArray = [...array, errar];
         setArray(novoArray)
-        
+
 
     }
 
     function quase() {
         setTela3(false);
-        setTela4(true);
+        setTela5(true);
         setContador(contador + 1);
         setDefineIcone(quaseacertar);
         setColocarSublinhado('orange');
@@ -64,7 +66,7 @@ function RenderizaPerguntas(props) {
 
     function zap() {
         setTela3(false);
-        setTela4(true);
+        setTela6(true);
         setContador(contador + 1);
         setDefineIcone(acertar);
         setColocarSublinhado('green');
@@ -76,9 +78,9 @@ function RenderizaPerguntas(props) {
     return (
         <>
             {tela1 && (
-                <Cartao ativar ={!tela1.toString()}>
-                    <Pergunta>Pergunta {id}</Pergunta>
-                    <BotaoPlay src={play} onClick={() => {
+                <Cartao data-test="flashcard" ativar={!tela1.toString()}>
+                    <Pergunta data-test="flashcard-text">Pergunta {id}</Pergunta>
+                    <BotaoPlay data-test="play-btn" src={play} onClick={() => {
                         setTela1(false);
                         setTela2(true);
                     }
@@ -88,9 +90,9 @@ function RenderizaPerguntas(props) {
             )}
 
             {tela2 && (
-                <Cartao ativa={tela2.toString()}>
-                    <TextoPergunta>{question}</TextoPergunta>
-                    <BotaoVirar src={virar} onClick={() => {
+                <Cartao data-test="flashcard" ativa={tela2.toString()}>
+                    <TextoPergunta data-test="flashcard-text">{question}</TextoPergunta>
+                    <BotaoVirar data-test="turn-btn" src={virar} onClick={() => {
                         setTela2(false);
                         setTela3(true);
                     }
@@ -99,22 +101,35 @@ function RenderizaPerguntas(props) {
             )}
 
             {tela3 && (
-                <Cartao1>
-                    <TextoResposta>{answer}</TextoResposta>
+                <Cartao1 data-test="flashcard">
+                    <TextoResposta data-test="flashcard-text">{answer}</TextoResposta>
                     <Lembranca>
-                        <Button1 onClick={naoLembrei}>
+                        <Button1 data-test="no-btn" onClick={naoLembrei}>
                             <Buttonajuste>Não lembrei</Buttonajuste>
                         </Button1>
-                        <Button2 onClick={quase}>Quase não lembrei</Button2>
-                        <Button3 onClick={zap}>Zap!</Button3>
+                        <Button2 data-test="partial-btn" onClick={quase}>Quase não lembrei</Button2>
+                        <Button3 data-test="zap-btn" onClick={zap}>Zap!</Button3>
                     </Lembranca>
                 </Cartao1>
             )}
 
             {tela4 && (
-                <Cartao>
-                    <Pergunta1 sublinhado={colocarSublinhado}>Pergunta {id}</Pergunta1>
-                    <BotaoPlay src={defineIcone} />
+                <Cartao data-test="flashcard">
+                    <Pergunta1 data-test="flashcard-text" sublinhado={colocarSublinhado}>Pergunta {id}</Pergunta1>
+                    <BotaoPlay data-test="no-icon" src={defineIcone} />
+                </Cartao>
+            )}
+
+            {tela5 && (
+                <Cartao data-test="flashcard">
+                    <Pergunta1 data-test="flashcard-text" sublinhado={colocarSublinhado}>Pergunta {id}</Pergunta1>
+                    <BotaoPlay data-test="partial-icon"  src={defineIcone} />
+                </Cartao>
+            )}
+            {tela6 && (
+                <Cartao data-test="flashcard">
+                    <Pergunta1 data-test="flashcard-text" sublinhado={colocarSublinhado}>Pergunta {id}</Pergunta1>
+                    <BotaoPlay data-test="zap-icon" src={defineIcone} />
                 </Cartao>
             )}
         </>
@@ -182,6 +197,7 @@ const BotaoPlay = styled.img`
     height: 23px;
     width: 20px;
     color: #333333;
+    cursor: pointer;
 
 `;
 
@@ -206,6 +222,7 @@ const BotaoVirar = styled.img`
     left: 73px;
     color: #333333;
     margin-left: 254px;
+    cursor: pointer;
 `;
 
 const TextoResposta = styled.p`
@@ -242,6 +259,7 @@ const Button1 = styled.div`
     display:flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 `;
 const Buttonajuste = styled.div`
     height: 37.17px;
@@ -275,6 +293,7 @@ const Button2 = styled.div`
     display:flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 `;
 
 const Button3 = styled.div`
@@ -292,4 +311,5 @@ const Button3 = styled.div`
     display:flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 `;

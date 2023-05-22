@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import styled from 'styled-components';
 import logo from '../Assets/logo.png';
 
@@ -11,7 +10,7 @@ export default function TelaInicial(props) {
       <Inicial>
         <img src={logo} alt="Logo" />
         <div>ZapRecall</div>
-        <button
+        <button data-test="start-btn"
           onClick={() => {
             setPrimeira(true);
           }}
@@ -70,5 +69,6 @@ const Inicial = styled.div`
     line-height: 22px;
     letter-spacing: 0em;
     text-align: center;
+    cursor: pointer;
   }
 `;

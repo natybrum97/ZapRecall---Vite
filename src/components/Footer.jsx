@@ -1,10 +1,12 @@
 import styled from 'styled-components';
 import errar from '../Assets/icone_erro.png';
+import quaseacertar from '../Assets/icone_quase.png';
+import acertar from '../Assets/icone_certo.png';
 import party from '../Assets/party.png';
 import sad from '../Assets/sad.png';
 
 export default function Footer(props) {
-    const { contador, array, setArray } = props;
+    const { contador, array } = props;
 
     let mensagem;
     let titulo;
@@ -14,7 +16,7 @@ export default function Footer(props) {
         mensagem = (<Paragrafo2>Você não esqueceu de nenhum flashcard!</Paragrafo2>);
         titulo = (<Paragrafo3>Parabéns!</Paragrafo3>);
         iconefoto = party;
-       
+
     } else if (array.includes(errar) && contador === 8) {
         mensagem = (<Paragrafo2> Ainda faltam alguns... Mas não desanime!</Paragrafo2>);
         titulo = (<Paragrafo3>Putz...</Paragrafo3>);
@@ -25,53 +27,83 @@ export default function Footer(props) {
     return (
 
         <>
-            {(contador < 8) && (
-                <Footercss ativa={"true"}>
+            {(contador === 0) && (
+                <Footercss data-test="footer" ativa={"true"}>
 
                     <Paragrafo>{contador}/8 CONCLUÍDOS</Paragrafo>
-
-                    <Icones>
-
-                        {array.map((imagem, index) => {
-                            return <Icone src={imagem} key={index} />;
-                        })}
-
-                    </Icones>
 
                 </Footercss>
             )}
 
+            {(contador < 8 && contador !== 0) && (
+                <Footercss1 data-test="footer" ativa={"true"}>
+                    <Paragrafo>{contador}/8 CONCLUÍDOS</Paragrafo>
+                    <Icones>
+                        {array.map((imagem, index) => (
+                            <RenderizaIcones key={index} imagem={imagem} index={index} array={array} />
+                        ))}
+                    </Icones>
+                </Footercss1>
+            )}
+
             {(contador === 8) && (
-                <Footercss>
-                    <Container>
+                <Footercss1 data-test="footer">
+                    <Container0 data-test="finish-text">
 
-                        <Iconefoto src={iconefoto} />
+                        <Container>
 
-                        <Titulo>{titulo}</Titulo>
+                            <Iconefoto src={iconefoto} />
 
-                    </Container>
+                            <Titulo>{titulo}</Titulo>
 
-                    <Mensagem>{mensagem}</Mensagem>
+                        </Container>
+
+                        <Mensagem>{mensagem}</Mensagem>
+
+                    </Container0>
 
                     <Paragrafo>{contador}/8 CONCLUÍDOS</Paragrafo>
 
                     <Icones>
 
-                        {array.map((imagem, index) => {
-                            return <Icone src={imagem} key={index} />;
-                        })}
+                        {array.map((imagem, index) => (
+                            <RenderizaIcones key={index} imagem={imagem} index={index} array={array} />
+                        ))}
+
 
                     </Icones>
 
-                </Footercss>
+                </Footercss1>
             )}
         </>
 
     );
 }
 
+function RenderizaIcones(props) {
+    if (props.array[props.index] === errar) {
+        return <Icone data-test="no-icon" src={errar} />;
+    } else if (props.array[props.index] === quaseacertar) {
+        return <Icone data-test="partial-icon" src={quaseacertar} />;
+    } else if (props.array[props.index] === acertar) {
+        return <Icone data-test="zap-icon" src={acertar} />;
+    }
+}
 
 const Footercss = styled.div`
+    height: ${({ ativa }) => (ativa === 'true' ? '70px' : '171px')};
+    width: 375px;
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    background-color: #FFFFFF;
+    box-shadow: 0px -4px 6px 0px #0000000D;
+
+    position: fixed;
+    bottom: 0;
+`
+
+const Footercss1 = styled.div`
     height: ${({ ativa }) => (ativa === 'true' ? '70px' : '171px')};
     width: 375px;
     display: flex;
@@ -80,11 +112,9 @@ const Footercss = styled.div`
     background-color: #FFFFFF;
     box-shadow: 0px -4px 6px 0px #0000000D;
 
-
     position: fixed;
     bottom: 0;
 `
-
 
 const Paragrafo = styled.div`
     height: 22px;
@@ -171,5 +201,12 @@ const Container = styled.div`
     justify-content: center;
     align-items: center;
     margin-top: 14px;
+`;
+const Container0 = styled.div`
+    width:375px;
+    height:101px;
+    display:flex;
+    flex-direction:column;
+    align-items: center;
 `;
 
