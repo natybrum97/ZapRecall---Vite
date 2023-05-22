@@ -30,7 +30,7 @@ const Inicial = styled.div`
   z-index: 2;
   position: absolute;
   top: 0;
-  left: 422px;
+  left: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
